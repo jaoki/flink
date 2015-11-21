@@ -20,10 +20,48 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-This document describes a processing sequence of [Local Execution](../apis/local_execution.html)
-This is intented to illustrate how Apache Flink excution runs
+This document describes the processing sequence of [Local Execution](../apis/local_execution.html)
 
 {:toc}
+
+## Overview
+There is a piece of code that loads a file, filters and write back to a file.
+
+Cool example of what Flink is capable of.
+
+~~~java
+
+final ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+DataSet<String> data = env.readTextFile("file:///path/to/text1.txt");
+DataSet<String> filteredData = data.filter(new FilterFunction<String>(){
+	@Override
+	public boolean filter(String value) throws Exception {
+		return value.startsWith("[ERROR]");
+	}
+});
+filteredData.writeAsText("file:///path/to/output1.txt");
+env.execute();
+
+
+
+public static void main(String[] args) throws Exception {
+    ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(); // [1]
+
+    DataSet<String> data = env.readTextFile("file:///path/to/file"); // [2]
+
+    data.filter(new FilterFunction<String>() { 
+            public boolean filter(String value) {
+                return value.startsWith("http://");
+            }
+        })
+        .writeAsText("file:///path/to/result");
+
+    JobExecutionResult res = env.execute(); // [???]
+}
+~~~
+
+
+In this document, 
 
 
 
