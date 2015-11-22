@@ -31,32 +31,17 @@ Cool example of what Flink is capable of.
 
 ~~~java
 
-final ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
-DataSet<String> data = env.readTextFile("file:///path/to/text1.txt");
-DataSet<String> filteredData = data.filter(new FilterFunction<String>(){
-	@Override
-	public boolean filter(String value) throws Exception {
-		return value.startsWith("[ERROR]");
-	}
-});
-filteredData.writeAsText("file:///path/to/output1.txt");
-env.execute();
-
-
-
 public static void main(String[] args) throws Exception {
-    ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(); // [1]
-
-    DataSet<String> data = env.readTextFile("file:///path/to/file"); // [2]
-
-    data.filter(new FilterFunction<String>() { 
-            public boolean filter(String value) {
-                return value.startsWith("http://");
-            }
-        })
-        .writeAsText("file:///path/to/result");
-
-    JobExecutionResult res = env.execute(); // [???]
+	final ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();     // [1]
+	DataSet<String> data = env.readTextFile("file:///path/to/text1.txt");   // [2]
+	data.filter(new FilterFunction<String>(){                     // [3]
+			@Override
+			public boolean filter(String value) throws Exception {
+				return value.startsWith("[ERROR]");
+			}
+		})
+		.writeAsText("file:///path/to/output1.txt");   // [4]
+	env.execute();   // [5]
 }
 ~~~
 
@@ -66,4 +51,6 @@ In this document,
 
 
 ## ExecutionEnvironment to FlnkMiniCluster
+
+<img src="local_execution_sequence1.svg" alt="Local Execution Sequence1" style="text-align: center;"/>
 
